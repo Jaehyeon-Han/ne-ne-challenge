@@ -3,12 +3,17 @@ package com.github.nenidan.ne_ne_challenge.domain.shop.stock.infrastructure.repo
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Lock;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import com.github.nenidan.ne_ne_challenge.domain.shop.stock.infrastructure.entity.StockEntity;
 
+import jakarta.persistence.LockModeType;
+
 public interface StockJpaRepository extends JpaRepository<StockEntity, Long> {
+
+    @Lock(LockModeType.PESSIMISTIC_WRITE)
     @Query("SELECT se FROM StockEntity se WHERE se.productId = :productId")
     Optional<StockEntity> findByProductId(@Param("productId") Long productId);
 }
